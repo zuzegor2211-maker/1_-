@@ -1,24 +1,31 @@
-#Задания №7
-class product:
+# Задание №7 - Магазин: доставка товаров и группы товаров
 
-    def __init__(self,name,price,weight):
-        self.name = name
-        self.price = price
-        self.weight = weight
+class Product:
+    """Класс, описывающий товар"""
+    
+    def __init__(self, name, price, weight):
+        self.name = name      # название товара
+        self.price = price    # цена товара
+        self.weight = weight  # вес товара
     
     def __str__(self):
         return f"Товар: {self.name}, цена: {self.price}руб., вес: {self.weight} кг"
-    
-class product_group:
+
+
+class ProductGroup:
+    """Класс для формирования групп товаров с возможностью вычисления стоимости"""
     
     def __init__(self):
-        self.products = []
+        self.products = []  # список товаров в группе
     
-    def add_product(self,product): #Добавляет товар в группу
+    def add_product(self, product):
+        """Добавляет товар в группу"""
         self.products.append(product)
         print(f"Товар '{product.name}' добавлен в группу")
 
-    def finish_product(self, product_name): #Удаляем товар по названию
+    def remove_product(self, product_name):
+        """Удаляет товар из группы по названию"""
+        # Проходим по копии списка, чтобы безопасно удалять элементы
         for product in self.products[:]:
             if product.name == product_name:
                 self.products.remove(product)
@@ -27,22 +34,33 @@ class product_group:
         print(f"Товар '{product_name}' не найден в группе")
         return False
     
-    def amount(self):
-        sumt = 0
+    def total_price(self):
+        """Вычисляет общую стоимость всех товаров в группе"""
+        total = 0
         for product in self.products:
-            sumt += product.price
-        return sumt
-    
-#Создаем товары 
-id01 = product("Яблока", 150, 1)
-id02 = product("Молоко", 80, 1)
-id03 = product("Хлеб", 45, 0.4)
+            total += product.price
+        return total
 
-group = product_group()
+
+# Демонстрация работы
+
+# Создаём товары
+id01 = Product("Яблоки", 150, 1)   # яблоки: 150 руб, 1 кг
+id02 = Product("Молоко", 80, 1)    # молоко: 80 руб, 1 кг
+id03 = Product("Хлеб", 45, 0.4)    # хлеб: 45 руб, 0.4 кг
+
+# Создаём группу товаров
+group = ProductGroup()
+
+# Добавляем товары в группу
 group.add_product(id01)
 group.add_product(id02)
 group.add_product(id03)
-group.finish_product("Молоко")
-group.finish_product("Банан")
-group.finish_product("Хлеб")
-print(group.amount())
+
+# Удаляем товары из группы
+group.remove_product("Молоко")  # удаляем молоко
+group.remove_product("Банан")   # попытка удалить несуществующий товар
+group.remove_product("Хлеб")    # удаляем хлеб
+
+# Выводим общую стоимость оставшихся товаров (только яблоки)
+print(f"Общая стоимость товаров в группе: {group.total_price()} руб.")
